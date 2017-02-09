@@ -7,8 +7,12 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+// I added this
+import java.rmi.registry.*;
+
 import common.MessageInfo;
 
+//invokes method on a RMI server
 public class RMIClient {
 
 	public static void main(String[] args) {
@@ -32,15 +36,28 @@ public class RMIClient {
 
 		// TO-DO: Bind to RMIServer
 		try {
-				String name = "RMIServerI";
 				Registry registry = LocateRegistry.getRegistry(args[0]);
-				RMIServerI serv = (RMIServerI) registry.lookup(name);
+				iRMIServer = (RMIServerI) registry.lookup("RMIServerI");
 			}
 		 catch (Exception e) {
-				System.err.println("Client  exception:");
+				System.err.println("Client  exception when binding to the server :");
 				e.printStackTrace();
 		}
 
-		// TO-DO: Attempt to send messages the specified number of times
+		// Attempt to send messages the specified number of times
+
+		// number of messages sent
+		int total = 10;
+		for (int i=1; i<=total;i++){
+			try {
+				MessageInfo msg = new MessageInfo(total,i);
+				// Am i sure of that?
+				iRMIServer.receiveMessage(msg);
+				System.out.println("Client Sending message - "+ msg.toString());
+    	} catch (Exception e) {
+				System.err.println("Client Sending message " +i+" exception:");
+				e.printStackTrace();
+    	}
+		}
 	}
 }

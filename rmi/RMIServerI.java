@@ -8,6 +8,9 @@ import java.rmi.RemoteException;
 
 import common.*;
 
+// Remote interface
+// Contains methods remotely onvoked on remote object
+// Every interface extends java.rmi.Remote
 public interface RMIServerI extends Remote {
 	public void receiveMessage(MessageInfo msg) throws RemoteException;
 }
