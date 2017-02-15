@@ -29,17 +29,25 @@ public class UDPServer {
 		pacSize = pacData.length;
 		pac = new DatagramPacket(pacData, pacSize);
 		close=true;
+
 		while(close){
 			try {
+
+				//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
+				recvSoc.setSoTimeout(30000);
 				recvSoc.receive(pac);
+
+
 				String data = new String(pac.getData(), 0, pac.getLength());
 				processMessage(data);
+			} catch (SocketTimeoutException ste) {
+				close = false;
+				System.out.println("### Timed out after 30 seconds");
 			}
 			catch(IOException e){
 				System.err.println("Fail receiving message from the client");
 			}
 		}
-		//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
 
 		recvSoc.close();
 	}
