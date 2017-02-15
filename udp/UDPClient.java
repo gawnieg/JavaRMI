@@ -61,7 +61,7 @@ public class UDPClient {
 
 		// TO-DO: Send the messages to the server
 		for( int i = 1; i <= countTo; i++){
-			System.out.println("Sending message " + i);
+			System.out.println("Sending message "+countTo+";" + i);
 			String str = new String();
 			str+=countTo;
 			str+=";";
