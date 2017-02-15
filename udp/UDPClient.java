@@ -40,7 +40,6 @@ public class UDPClient {
 
 		// TO-DO: Construct UDP client class and try to send messages
 		UDPClient oneUDPClient  = new UDPClient();
-//			oneUDPClient.send("h2llo"", serverAddr, recvPort);
 		oneUDPClient.testLoop(serverAddr, recvPort,countTo);
 	}
 

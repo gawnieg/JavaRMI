@@ -40,9 +40,18 @@ public class UDPServer {
 
 				String data = new String(pac.getData(), 0, pac.getLength());
 				processMessage(data);
+
+
 			} catch (SocketTimeoutException ste) {
 				close = false;
 				System.out.println("### Timed out after 30 seconds");
+				// TO-DO: If this is the last expected message, then identify
+				//        any missing messages
+					for(int j =1; j <= totalMessages; j++){
+						if(receivedMessages[j-1] != j){
+							System.out.println("Missing "+j+ " from recieved");
+						}
+					}
 			}
 			catch(IOException e){
 				System.err.println("Fail receiving message from the client");
@@ -63,7 +72,7 @@ public class UDPServer {
 				ourMessage.toString();
 
 		// TO-DO: On receipt of first message, initialise the receive buffer
-			if(ourMessage.messageNum == 1){
+			if(totalMessages == -1){
 				totalMessages = ourMessage.totalMessages;
 				receivedMessages = new int[totalMessages];
 			}
@@ -72,18 +81,14 @@ public class UDPServer {
 			receivedMessages[ourMessage.messageNum-1] = ourMessage.messageNum;
 			ourMessage.toString();
 
-		// TO-DO: If this is the last expected message, then identify
-		//        any missing messages
-		if(ourMessage.messageNum==totalMessages){
-		 	for(int j =1; j <= totalMessages; j++){
-		 		if(receivedMessages[j-1] != j){
-		 			System.out.println("Missing "+j+ " from recieved");
-		 		}
-			}
+
 		}
-	} catch (Exception e){
+	 catch (Exception e){
 		System.err.println("Fail receiving message from the client");
 	}
+
+
+
 	}
 
 
