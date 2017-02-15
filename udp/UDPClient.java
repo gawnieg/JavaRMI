@@ -40,7 +40,8 @@ public class UDPClient {
 
 		// TO-DO: Construct UDP client class and try to send messages
 		UDPClient oneUDPClient  = new UDPClient();
-		oneUDPClient.send("hello", serverAddr, recvPort);
+//			oneUDPClient.send("h2llo"", serverAddr, recvPort);
+		oneUDPClient.testLoop(serverAddr, recvPort,countTo);
 	}
 
 	public UDPClient() {
@@ -55,9 +56,19 @@ public class UDPClient {
 	}
 
 	private void testLoop(InetAddress serverAddr, int recvPort, int countTo) {
-		int				tries = 0;
+	// The teacher uses tries
+	// TO-DO use it
+		int	tries = 0;
 
 		// TO-DO: Send the messages to the server
+		for( int i = 1; i <= countTo; i++){
+			System.out.println("Sending message " + i);
+			String str = new String();
+			str+=countTo;
+			str+=";";
+			str += i;
+			this.send(str, serverAddr, recvPort);
+		}
 	}
 
 	private void send(String payload, InetAddress destAddr, int destPort) {
@@ -69,8 +80,9 @@ public class UDPClient {
 		pktData = payload.getBytes();
 		payloadSize = pktData.length;
 		pkt = new DatagramPacket(pktData, payloadSize, destAddr, destPort);
-		try {sendSoc.send(pkt);}
-		catch (IOException e){
+		try {
+			sendSoc.send(pkt);
+		}	catch (IOException e){
 			e.printStackTrace();
 		}
 	}

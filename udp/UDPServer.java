@@ -28,14 +28,16 @@ public class UDPServer {
 		pacData = new byte[218];
 		pacSize = pacData.length;
 		pac = new DatagramPacket(pacData, pacSize);
-		try {
-			recvSoc.receive(pac);
-			String data = new String(pac.getData(), 0, pac.getLength());
-			System.out.println(data);
-			processMessage(data);
-		}
-		catch(IOException e){
-			System.err.println("Fail receiving message from the client");
+		close=true;
+		while(close){
+			try {
+				recvSoc.receive(pac);
+				String data = new String(pac.getData(), 0, pac.getLength());
+				processMessage(data);
+			}
+			catch(IOException e){
+				System.err.println("Fail receiving message from the client");
+			}
 		}
 		//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
 
@@ -45,13 +47,25 @@ public class UDPServer {
 	public void processMessage(String data) {
 
 		MessageInfo msg = null;
+		System.out.println(data);
 
 		// TO-DO: Use the data to construct a new MessageInfo object
+		try {
+			MessageInfo ourMessage = new MessageInfo(data) ;
+				ourMessage.toString();
 
 		// TO-DO: On receipt of first message, initialise the receive buffer
+			if(ourMessage.messageNum == 1){
+				totalMessages = ourMessage.totalMessages;
+				receivedMessages = new int[totalMessages];
+			}
 
 		// TO-DO: Log receipt of the message
-
+			receivedMessages[ourMessage.messageNum-1] = ourMessage.messageNum;
+			ourMessage.toString();
+		} catch (Exception e){
+			System.err.println("Fail receiving message from the client");
+		}
 		// TO-DO: If this is the last expected message, then identify
 		//        any missing messages
 
