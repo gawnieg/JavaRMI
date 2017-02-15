@@ -63,12 +63,19 @@ public class UDPServer {
 		// TO-DO: Log receipt of the message
 			receivedMessages[ourMessage.messageNum-1] = ourMessage.messageNum;
 			ourMessage.toString();
-		} catch (Exception e){
-			System.err.println("Fail receiving message from the client");
-		}
+
 		// TO-DO: If this is the last expected message, then identify
 		//        any missing messages
-
+		if(ourMessage.messageNum==totalMessages){
+		 	for(int j =1; j <= totalMessages; j++){
+		 		if(receivedMessages[j-1] != j){
+		 			System.out.println("Missing "+j+ " from recieved");
+		 		}
+			}
+		}
+	} catch (Exception e){
+		System.err.println("Fail receiving message from the client");
+	}
 	}
 
 
