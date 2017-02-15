@@ -25,22 +25,57 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 	}
 
 	public void receiveMessage(MessageInfo msg) throws RemoteException {
-		System.out.println("Server recieves message - " +msg.toString());
-		// TO-DO: On receipt of first message, initialise the receive buffer
 
-		// TO-DO: Log receipt of the message
+			System.out.println("Server recieves message - " +msg.toString());
+			// TO-DO: On receipt of first message, initialise the receive buffer
 
-		// TO-DO: If this is the last expected message, then identify
-		//        any missing messages
+			// TO-DO: Log receipt of the message
 
+			// TO-DO: If this is the last expected message, then identify
+			//        any missing messages
+
+			// TO-DO: Use the data to construct a new MessageInfo object
+			try {
+				// MessageInfo ourMessage = new MessageInfo(data) ;
+				// 	ourMessage.toString();
+				System.out.println("In try statement");
+				System.out.println("Total messages is");
+				System.out.println(totalMessages);
+			// TO-DO: On receipt of first message, initialise the receive buffer
+				if(msg.messageNum == 1){
+					totalMessages = msg.totalMessages;
+					receivedMessages = new int[totalMessages];
+				}
+
+			// TO-DO: Log receipt of the message
+				receivedMessages[msg.messageNum-1] = msg.messageNum;
+				msg.toString();
+
+			// TO-DO: If this is the last expected message, then identify
+			//        any missing messages
+			if(msg.messageNum==totalMessages){
+				boolean missing_messages = false;
+				System.out.println("Checking for missing messages....");
+			 	for(int j =1; j <= totalMessages; j++){
+			 		if(receivedMessages[j-1] != j){
+			 			System.out.println("Missing "+j+ " from recieved");
+						missing_messages = true;
+			 		}
+
+				}
+				if(missing_messages==false){
+					System.out.println("There were no missing messages!!!!");
+				}
+			}
+		} catch (Exception e){
+			System.err.println("Fail receiving message from the client");
+		}
 	}
 
 
 	public static void main(String[] args) {
 
-		RMIServer rmis = null;
-
-		// Initialise Security Manager
+		//Initialise Security Manager
 		if (System.getSecurityManager() == null) {
 				System.setSecurityManager(new SecurityManager());
 		}
@@ -49,10 +84,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 
 		// Instantiate the server class
 		try{
-		RMIServerI ser = new RMIServer();
+		RMIServerI ser = new RMIServer(); //whoa, whats happening here?
 
-		String serverURL ="XXX";
-		rebindServer(serverURL, (RMIServer) ser);
+		String serverURL ="coline";
+		rebindServer(serverURL, (RMIServer) ser); //this is the below method, why casting?
 	} catch (Exception e) {
 		System.err.println("RMIServerI exception:");
 		e.printStackTrace();
@@ -71,7 +106,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// Registry registry = LocateRegistry.createRegistry(8080);
 
 		try{
-		Registry registry = LocateRegistry.getRegistry(8080);
+		Registry registry = LocateRegistry.createRegistry(9000); //must match that of serverURL passed
 
 
 		// TO-DO:
@@ -79,7 +114,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// Note - Registry.rebind (as returned by createRegistry / getRegistry) does something similar but
 		// expects different things from the URL field.
 
-			registry.rebind("RMIServerI", server);
+			registry.rebind(serverURL, server);
 			System.out.println("RMIServerI bound");
 			} catch (Exception e) {
 				System.err.println("RMIServerI exception:");
