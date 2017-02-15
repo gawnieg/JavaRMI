@@ -31,7 +31,7 @@ public class RMIClient {
 		try {
 				System.out.println("Initialising client side");
 				Registry registry = LocateRegistry.getRegistry(args[0],9000);
-				iRMIServer = (RMIServerI) registry.lookup("coline");//why casting here? // was "RMIServer"
+				IRMIServer = (RMIServerI) registry.lookup("coline");//why casting here? // was "RMIServer"
 			} catch (Exception e) {
 				System.err.println("Client  exception when binding to the server :");
 				e.printStackTrace();
@@ -41,7 +41,7 @@ public class RMIClient {
 		for (int i=1; i<=numMessages;i++){
 			try {
 				MessageInfo msg = new MessageInfo(numMessages,i); //constructuing new messagesInfo with constructor
-				iRMIServer.receiveMessage(msg);
+				IRMIServer.receiveMessage(msg);
 				System.out.println("Client Sending message - "+ msg.toString());
     		} catch (Exception e) {
 				System.err.println("Client Sending message " +i+" exception:");

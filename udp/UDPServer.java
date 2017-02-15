@@ -46,7 +46,7 @@ public class UDPServer {
 				// any missing messages
 				for(int j =1; j <= totalMessages; j++){
 					if(receivedMessages[j-1] != j){
-						System.out.println("Missing "+j+ " from recieved");
+						System.out.println("Missing "+totalMessages+ ";"+j+ " from recieved");
 					}
 				}
 			}
