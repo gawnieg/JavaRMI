@@ -54,7 +54,7 @@ public class UDPClient {
 	private void testLoop(InetAddress serverAddr, int recvPort, int countTo) {
 		// Send the messages to the server
 		for( int i = 1; i <= countTo; i++){
-			System.out.println("Sending message " + i);
+			System.out.println("Sending message "+countTo+";" + i);
 			String str = new String();
 			str+=countTo;
 			str+=";";
